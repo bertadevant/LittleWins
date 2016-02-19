@@ -19,8 +19,17 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.CheckBox;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
+import android.content.res.Resources;
+
+import java.util.ArrayList;
+
 public class TodayScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ArrayList<EntriesClass> stored_Entries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +42,18 @@ public class TodayScreen extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
+        //set up randomEncouragement
+        randomEncouragment();
+        if (isThereAnyEntries() == true)
+        {
+
+        } else {
+
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -79,6 +96,94 @@ public class TodayScreen extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    protected void createEntryObject()
+    {
+        /*
+        TODO:
+            - read JSON Entry file to check if the entry already exist
+            - write entry object to JSON file
+         */
+        writetoJSON("entries.json");
+    }
+
+    protected void randomEncouragment()
+    {
+        TextView randomEncouragement = (TextView) findViewById(R.id.randomEncouragement);
+        Random rgenerator = new Random();
+        Resources res = getResources();
+        String [] encouragementArray = res.getStringArray(R.array.randomEncouragement);
+
+        if (isThereAnyEntries() == false)
+        {
+            randomEncouragement.setText("@noEntriesRecorded");
+        } else {
+            String rg = encouragementArray[rgenerator.nextInt(encouragementArray.length)];
+            randomEncouragement.setText(rg);
+        }
+
+    }
+
+    protected boolean isThereAnyEntries()
+    {
+        if (readJSON("entries.json").isEmpty())
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected void writetoJSON(String fileName)
+    {
+
+    }
+
+    protected ArrayList readJSON(String fileName)
+    {
+        ArrayList<EntriesClass> stored_Entries;
+        String json = null;
+        try {
+            InputStream in = getAssets().open(fileName);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+
+            for (int i = 0; i < scheduleData.Count; i++) {
+                JsonData game = scheduleData [i];
+
+                ScheduledGames arenaGame = new ScheduledGames();
+
+                string arenaStr = game ["arena"].ToString();
+                if (arenaStr.Length > 0)
+                    arenaGame.arena = arenaStr;
+
+                string iconURL_Str = game ["iconURL"].ToString();
+                if (iconURL_Str.Length > 0)
+                    arenaGame.iconURL = iconURL_Str;
+
+                string teamPC_Str = game ["teamColor"].ToString();
+                if (teamPC_Str.Length > 0)
+                    arenaGame.teamColor = teamPC_Str;
+
+                JsonData individualGameTimes = game["games"];
+                if (individualGameTimes.Count <= 0) {
+                    //Check back soon for more opportunities\n to play Turbo live at the Amway Center\n this NBA season.
+                    arenaGame.games.Add("No upcoming games.\nCheck back soon for more opportunities\n to play Turbo live this NBA season.");
+                } else {
+                    for (int j = 0; j < maxGames; j++) {
+                        arenaGame.games.Add(individualGameTimes [j].ToString());
+                    }
+                }
+
+                gameList.Add(arenaGame);
+            }
+
+        }
+
+        return stored_Entries;
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

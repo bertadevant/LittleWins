@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class DayClass extends EntriesClass {
 
-    public String day_Date;
+    protected String day_Date;
     private ArrayList<EntriesClass> day_Entries;
 
     DayClass()
@@ -18,12 +18,12 @@ public class DayClass extends EntriesClass {
         day_Date = df.format(c.getTime());
     }
 
-    public void setDay_Entry(EntriesClass entry)
+    protected void setDay_Entry(EntriesClass entry)
     {
         day_Entries.add(entry);
     }
 
-    private int getDayResult()
+    protected int getDayResult()
     {
         int dayResults = 0, count = 0;
         for (int i=0; i<day_Entries.size(); i++ )
@@ -42,7 +42,7 @@ public class DayClass extends EntriesClass {
         return dayResults;
     }
 
-    public void endOfDay()
+    protected void endOfDay()
     {
         //Save on file the Date, Entries and dayResult
     }

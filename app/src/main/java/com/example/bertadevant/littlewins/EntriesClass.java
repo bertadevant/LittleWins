@@ -20,27 +20,27 @@ public class EntriesClass {
         System.out.print("Cannot enter an empty entry");
     }
 
-    public int getEntry_ID() {
+    protected int getEntry_ID() {
         return entry_ID;
     }
 
-    public int getEntry_level() {
+    protected int getEntry_level() {
         return entry_level;
     }
 
-    public String getEntry_String() {
+    protected String getEntry_String() {
         return entry_String;
     }
 
-    public void setEntry_ID(int ID) {
+    protected void setEntry_ID(int ID) {
         entry_ID = ID;
     }
 
-    public void setEntry_level(int level)
+    protected void setEntry_level(int level)
     {
         entry_level = level;
     }
-    public void setEntry_String(String name)
+    protected void setEntry_String(String name)
     {
         entry_String = name;
     }
