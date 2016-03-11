@@ -16,6 +16,7 @@ public class EntriesClass {
         //prints the new entry on a json file
     }
 
+
     EntriesClass() {
         System.out.print("Cannot enter an empty entry");
     }
@@ -45,6 +46,9 @@ public class EntriesClass {
         entry_String = name;
     }
 
+    //Level 0 : bad
+    //level 1 : normal
+    //level 2 : good
 
     /*
     //what I am doing?

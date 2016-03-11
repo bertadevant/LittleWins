@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.LinearLayout;
 import android.widget.Button;
@@ -23,13 +24,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 import android.content.res.Resources;
-
+import org.json.*;
 import java.util.ArrayList;
 
 public class TodayScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<EntriesClass> stored_Entries;
+    private ListView entryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,11 @@ public class TodayScreen extends AppCompatActivity
         randomEncouragment();
         if (isThereAnyEntries() == true)
         {
+            entryList = (ListView) findViewById(R.id.entriesList);
+            for (int i =0; i<stored_Entries.size(); i++)
+            {
+                entryList.add(stored_Entries(i))
+            }
 
         } else {
 
@@ -139,49 +146,55 @@ public class TodayScreen extends AppCompatActivity
 
     }
 
-    protected ArrayList readJSON(String fileName)
-    {
-        ArrayList<EntriesClass> stored_Entries;
+    protected ArrayList readJSON(String arrayToGet) {
+        try {
+//            ArrayList<EntriesClass> stored_Entries;
+            JSONObject obj = new JSONObject(loadJSONFromAsset());
+            JSONArray jsonArray = obj.getJSONArray(arrayToGet);
+//        ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
+//        HashMap<String, String> m_li;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject entryString = jsonArray.getJSONObject(i);
+                EntriesClass new_Entry = new EntriesClass();
+
+                int entry_ID = jsonArray.getJSONObject(i).getInt("entry_ID");
+                if (entry_ID != 0)
+                    new_Entry.setEntry_ID(entry_ID);
+
+                int entry_level = jsonArray.getJSONObject(i).getInt("entry_level");
+                if (entry_level >= 0)
+                    new_Entry.setEntry_level(entry_level);
+
+                String entry_String = jsonArray.getJSONObject(i).getString("entry_String");
+                if (entry_String.length() > 0)
+                    new_Entry.setEntry_String(entry_String);
+
+                stored_Entries.add(new_Entry);
+            }
+            return stored_Entries;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream in = getAssets().open(fileName);
+            InputStream is = getAssets().open("entries.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
-
-            for (int i = 0; i < scheduleData.Count; i++) {
-                JsonData game = scheduleData [i];
-
-                ScheduledGames arenaGame = new ScheduledGames();
-
-                string arenaStr = game ["arena"].ToString();
-                if (arenaStr.Length > 0)
-                    arenaGame.arena = arenaStr;
-
-                string iconURL_Str = game ["iconURL"].ToString();
-                if (iconURL_Str.Length > 0)
-                    arenaGame.iconURL = iconURL_Str;
-
-                string teamPC_Str = game ["teamColor"].ToString();
-                if (teamPC_Str.Length > 0)
-                    arenaGame.teamColor = teamPC_Str;
-
-                JsonData individualGameTimes = game["games"];
-                if (individualGameTimes.Count <= 0) {
-                    //Check back soon for more opportunities\n to play Turbo live at the Amway Center\n this NBA season.
-                    arenaGame.games.Add("No upcoming games.\nCheck back soon for more opportunities\n to play Turbo live this NBA season.");
-                } else {
-                    for (int j = 0; j < maxGames; j++) {
-                        arenaGame.games.Add(individualGameTimes [j].ToString());
-                    }
-                }
-
-                gameList.Add(arenaGame);
-            }
-
         }
-
-        return stored_Entries;
+        return json;
     }
 
 
