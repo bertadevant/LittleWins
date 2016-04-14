@@ -1,14 +1,24 @@
 {
-   "Entries": [
-   {
-      "entry_ID":1,
-      "entry_level":2,
-      "entry_String":"Workout"
-   },
-   {
-      "entry_ID":2,
-      "entry_level":0,
-      "entry_String":"Eat Junk Food"
-   }
-],
+    "entries": [
+    {
+      "entry_ID": 1,
+      "entry_level": 3,
+      "entry_String": "Ate Junk Food"
+    },
+    {
+      "entry_ID": 2,
+      "entry_level": 1,
+      "entry_String":" Worked out"
+    },
+    {
+      "entry_ID": 3,
+      "entry_level": 1,
+      "entry_String": "Went to Class"
+    },
+    {
+      "entry_ID": 4,
+      "entry_level": 2,
+      "entry_String": "Bought Coffee"
+    }
+  ]
 }

@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.CheckBox;
-
+import java.util.List.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
@@ -33,6 +33,7 @@ public class TodayScreen extends AppCompatActivity
     private ArrayList<EntriesClass> stored_Entries;
     private ListView entryList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,42 +45,34 @@ public class TodayScreen extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //go to another activity to add a new entry
             }
         });
         //set up randomEncouragement
         randomEncouragment();
-        if (isThereAnyEntries() == true)
-        {
+        if (isThereAnyEntries() == true) {
             entryList = (ListView) findViewById(R.id.entriesList);
+            readJSON("entries");
+
+
             for (int i =0; i<stored_Entries.size(); i++)
             {
-                entryList.add(stored_Entries(i))
+                //entryList.add
             }
 
         } else {
 
         }
 
+//        entryList.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//
+//            }
+//        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -148,14 +141,11 @@ public class TodayScreen extends AppCompatActivity
 
     protected ArrayList readJSON(String arrayToGet) {
         try {
-//            ArrayList<EntriesClass> stored_Entries;
+            //create JSON object that calls method that will load the entries.json
             JSONObject obj = new JSONObject(loadJSONFromAsset());
             JSONArray jsonArray = obj.getJSONArray(arrayToGet);
-//        ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
-//        HashMap<String, String> m_li;
 
             for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject entryString = jsonArray.getJSONObject(i);
                 EntriesClass new_Entry = new EntriesClass();
 
                 int entry_ID = jsonArray.getJSONObject(i).getInt("entry_ID");
@@ -217,18 +207,7 @@ public class TodayScreen extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    /*
-    //TO DO
-    Method where I read a JSON file and check if it is empty, if it is empty I load the Button; if it is not I load the List with the entries
-    Method for loading the Entries
-
-
-
-    */
 }
